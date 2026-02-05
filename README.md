@@ -1,36 +1,41 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# PokeAPI Explorer - Next.js
 
-First, run the development server:
+Este es un proyecto desarrollado con [Next.js](https://nextjs.org) utilizando `create-next-app` para explorar las capacidades de renderizado moderno y optimización de recursos.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Descripción
+El objetivo de este proyecto es crear un servidor web funcional integrando **React.js** y **Node.js**. Para poner a prueba estas herramientas, se utilizó la **PokeAPI** para implementar:
+
+* **Rutas Dinámicas:** Generación de páginas individuales para cada Pokémon basadas en su ID.
+* **Diseño Responsivo:** Interfaz adaptada para dispositivos móviles y escritorio.
+* **Optimización de Imágenes:** Uso de Lazy Loading para mejorar la velocidad de carga.
+
+La API utilizada está disponible en: [https://pokeapi.co](https://pokeapi.co)
+
+## Configuración de Imágenes
+Para aprovechar el componente `<Image />` de Next.js con dominios externos (donde se hospedan los sprites oficiales), configuramos el archivo `next.config.ts` permitiendo el acceso a los servidores de GitHub donde residen las imágenes:
+
+```typescript
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  reactCompiler: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+        port: '',
+        pathname: '/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/**',
+      },
+    ],
+  },
+};
+
+export default nextConfig;
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Como tal el proyecto desde una pantalla principal redirecciona a una paguina con layout propio referente a la PokeAPI, a traves de solicitudes Fect en la API logramos mostrar un menu completo con imagenes .svg y nombres de los pokemones a mostrar siendo en total 20 de estos, el layout nos sirve como barra de navegacion para facilitar la busqueda y no tener que bajar por la paguina hasta buscarlo.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+En ambos casos al seleccionar un pokemon este te mandara directamente a si paguina principal el cual mostrara una imagen png junto con si nombre y una habilidad del pokemon dentro de una carta de diseño gratuito, esto se logra accediendo a la informacion de cada pokemon de la API por su ID y transformandola en formato json para de esta manera obtener estos atributos propios del pokemón.
